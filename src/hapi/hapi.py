@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from json import loads
 import os
+from posix import mkdir
 from random import randint
 import requests
 from urllib.parse import quote
@@ -16,7 +17,20 @@ class Haven:
         self.__purity = "100" # SFW|SKETCHY|NSFW
         self.__min_height = 0
         self.__min_width = 0
-
+        self.__latest_result = []
+    @classmethod
+    def download_images(cls, images: list[dict], download_path: str):
+        total = len(images)
+        if not os.path.exists(download_path): mkdir(download_path)
+        for i, img in enumerate(images):
+            iurl = img['path']
+            filename = iurl.split('/')[-1]
+            path_ = f"{download_path}/{filename}"
+            response = requests.get(iurl)
+            ibytes = response.content
+            with open(path_, "wb+") as fp:
+                fp.write(ibytes)
+                print(f"{i}/{total}[*] {iurl} -> {path_}")
     @classmethod
     def generate_seed(cls):
         possible ='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
@@ -34,7 +48,7 @@ class Haven:
     def sketchy_only(self):        self.__purity = "010"
     def accept_all_purities(self): self.__purity = "111"
 
-    def set_min_dimensions(self, w: int = 1920, h: int = 1080):
+    def set_min_resolution(self, w: int = 1920, h: int = 1080):
         self.__min_height = h
         self.__min_width = w
 
@@ -50,6 +64,7 @@ class Haven:
         request = requests.get(search_url)
         assert request.status_code == 200 and "Well the search failed:)"
         images = [ img for img in loads(request.content)['data'] if img['dimension_x'] >= self.__min_width and img['dimension_y'] >= self.__min_height ]
+        self.__latest_result = images
         return images
 
     def bulk_search(self, query: str = "", pages: int = 4) -> list[dict]:
@@ -59,4 +74,9 @@ class Haven:
         for i in range(pages):
             imgs = self.search(query, i+1)
             if len(imgs): images.extend(imgs)
+        self.__latest_result = images
         return images
+
+    def download_latest_result(self, download_path: str = "./haven"):
+        Haven.download_images(self.__latest_result, download_path);
+        self.__latest_result = []

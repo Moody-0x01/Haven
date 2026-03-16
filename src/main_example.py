@@ -7,6 +7,10 @@ import json
 def main():
     print("# Simple Random Image scrapper.")
     haven_instance = Haven()
+    haven_instance.set_min_resolution(); # Setup resolution, the default is 1080p
+    # haven_instance.set_min_resolution(1920, 1200); for a different resolution 1920x1200
+
+
     images = haven_instance.search()
     for im in images: print(json.dumps(im, indent=4))
     print("# Simple Random Image scrapper Multiple pages.")
@@ -25,7 +29,10 @@ def main():
     haven_instance.sfw_only() # SFW
     # haven_instance.nsfw_only() # NSWF
     # haven_instance.sketchy_only() # Sketchy content
+    # haven_instance.accept_all_purities() # Alll the above
     images = haven_instance.search()
     for im in images: print(json.dumps(im, indent=4))
+    print("# download latest search results")
+    haven_instance.download_latest_result()
 
 if __name__ == "__main__": main()
