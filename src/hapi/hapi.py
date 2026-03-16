@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+from json import loads
+import os
+from random import randint
+import requests
+from urllib.parse import quote
+
+class Haven:
+
+    def __init__(self) -> None:
+        self.__base   = "https://wallhaven.cc/api/v1"
+        self.__api_key = os.environ["WALLHAVEN_API_KEY"]
+        if not self.__api_key:
+            raise RuntimeError("Did not find the api key.")
+        self.__categories = "111" # GENERAL|ANIME|PEOPLE
+        self.__purity = "100" # SFW|SKETCHY|NSFW
+        self.__min_height = 0
+        self.__min_width = 0
+
+    @classmethod
+    def generate_seed(cls):
+        possible ='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+        return ''.join([possible[randint(0, len(possible)-1)] for _ in range(6)])
+
+    # category methods
+    def anime_only(self):         self.__categories = "010"
+    def people_only(self):        self.__categories = "001"
+    def generale_only(self):      self.__categories = "100"
+    def accept_all(self):         self.__categories = "111"
+
+    # purity methods
+    def nsfw_only(self):           self.__purity = "001"
+    def sfw_only(self):            self.__purity = "100"
+    def sketchy_only(self):        self.__purity = "010"
+    def accept_all_purities(self): self.__purity = "111"
+
+    def set_min_dimensions(self, w: int = 1920, h: int = 1080):
+        self.__min_height = h
+        self.__min_width = w
+
+    def search(self, query: str = "", page: int = 1) -> list[dict]:
+        search_url = f"{self.__base}/search"
+        if query:
+            query = quote(query)
+            search_url += f"?q={query}&apikey={self.__api_key}&categories={self.__categories}&atleast=1920x1080&page={page}&purity={self.__purity}"
+        else:
+            seed = Haven.generate_seed()
+            print("Searching with seed: ", seed)
+            search_url += f"?seed={seed}&apikey={self.__api_key}&categories={self.__categories}&atleast=1920x1080&page={page}&purity={self.__purity}"
+        request = requests.get(search_url)
+        assert request.status_code == 200 and "Well the search failed:)"
+        images = [ img for img in loads(request.content)['data'] if img['dimension_x'] >= self.__min_width and img['dimension_y'] >= self.__min_height ]
+        return images
+
+    def bulk_search(self, query: str = "", pages: int = 4) -> list[dict]:
+        images = []
+        if pages <= 0:
+            return [{}]
+        for i in range(pages):
+            imgs = self.search(query, i+1)
+            if len(imgs): images.extend(imgs)
+        return images
