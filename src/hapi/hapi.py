@@ -13,11 +13,13 @@ class Haven:
         self.__api_key = os.environ["WALLHAVEN_API_KEY"]
         if not self.__api_key:
             raise RuntimeError("Did not find the api key.")
+        self.__resolution = ""
         self.__categories = "111" # GENERAL|ANIME|PEOPLE
         self.__purity = "100" # SFW|SKETCHY|NSFW
         self.__min_height = 0
         self.__min_width = 0
         self.__latest_result = []
+
     @classmethod
     def download_images(cls, images: list[dict], download_path: str):
         total = len(images)
@@ -51,6 +53,8 @@ class Haven:
     def set_min_resolution(self, w: int = 1920, h: int = 1080):
         self.__min_height = h
         self.__min_width = w
+    def set_resolution(self, w: int = 1920, h: int = 1080):
+        self.__resolution = f"{w}x{h}"
 
     def search(self, query: str = "", page: int = 1) -> list[dict]:
         search_url = f"{self.__base}/search"
@@ -61,6 +65,7 @@ class Haven:
             seed = Haven.generate_seed()
             print("Searching with seed: ", seed)
             search_url += f"?seed={seed}&apikey={self.__api_key}&categories={self.__categories}&atleast=1920x1080&page={page}&purity={self.__purity}"
+        if self.__resolution: search_url += f"&resolutions={self.__resolution}"
         request = requests.get(search_url)
         assert request.status_code == 200 and "Well the search failed:)"
         images = [ img for img in loads(request.content)['data'] if img['dimension_x'] >= self.__min_width and img['dimension_y'] >= self.__min_height ]

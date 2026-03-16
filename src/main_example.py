@@ -7,8 +7,11 @@ import json
 def main():
     print("# Simple Random Image scrapper.")
     haven_instance = Haven()
-    haven_instance.set_min_resolution(); # Setup resolution, the default is 1080p
+    haven_instance.set_min_resolution(); # Setup min resolution, the default is 1080p
     # haven_instance.set_min_resolution(1920, 1200); for a different resolution 1920x1200
+    haven_instance.set_resolution(); # Setup resolution, the default is 1080p but the differnce between this and the other set_min_resolution.
+    # this one makes it so any resolution that is less than whatever resolution u set wont be send back.
+
 
 
     images = haven_instance.search()
