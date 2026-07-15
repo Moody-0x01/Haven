@@ -63,7 +63,6 @@ class Haven:
             search_url += f"?q={query}&apikey={self.__api_key}&categories={self.__categories}&atleast=1920x1080&page={page}&purity={self.__purity}"
         else:
             seed = Haven.generate_seed()
-            print("Searching with seed: ", seed)
             search_url += f"?seed={seed}&apikey={self.__api_key}&categories={self.__categories}&atleast=1920x1080&page={page}&purity={self.__purity}"
         if self.__resolution: search_url += f"&resolutions={self.__resolution}"
         request = requests.get(search_url)
