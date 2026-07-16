@@ -6,13 +6,14 @@
     <title>Wallhaven Explorer</title>
     <style>
         :root {
-            --bg-color: #0f111a;
-            --card-bg: #1e2233;
-            --text-color: #e3e6ed;
-            --accent-color: #ff79c6;
-            --accent-hover: #ff92df;
-            --input-bg: #151825;
-            --border-color: #2b3045;
+            --bg-color: #0a0a0a;             /* Pure matte midnight charcoal */
+            --card-bg: #161616;              /* Obsidian glass card backgrounds */
+            --text-color: #ededed;           /* Crisp silver-white text */
+            --accent-color: #ffffff;         /* Pure minimalist white accents */
+            --accent-hover: #e5c07b;         /* Subtle warm amber on hover interactions */
+            --input-bg: #111111;             /* Deep slate input boxes */
+            --border-color: #222222;         /* Sleek, subtle structural borders */
+            --text-muted: #a3a3a3;           /* Clean muted grey for metadata */
         }
 
         * {
@@ -48,45 +49,53 @@
 
         header h1 span {
             color: var(--accent-color);
+            border-bottom: 2px solid var(--accent-hover);
         }
 
+        /* --- Refined Search Bar Chemistry --- */
         .search-area {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px;
             justify-content: center;
-            align-items: center;
-            margin-bottom: 2rem;
+            align-items: stretch;
+            margin-bottom: 2.5rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .search-input {
-            flex: 1;
-            min-width: 280px;
-            max-width: 500px;
-            padding: 0.8rem 1.2rem;
-            font-size: 1rem;
+            flex: 2;
+            min-width: 260px;
+            padding: 0.7rem 1.2rem;
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 0.3px;
             background-color: var(--input-bg);
-            border: 2px solid var(--border-color);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             color: var(--text-color);
             outline: none;
-            transition: border-color 0.2s ease;
+            transition: all 0.2s ease;
         }
 
         .search-input:focus {
             border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.05);
         }
 
         .select-count {
-            padding: 0.8rem 1.2rem;
-            font-size: 1rem;
+            padding: 0 1rem;
+            font-size: 0.9rem;
+            font-weight: 400;
             background-color: var(--input-bg);
-            border: 2px solid var(--border-color);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             color: var(--text-color);
             outline: none;
             cursor: pointer;
-            transition: border-color 0.2s ease;
+            transition: all 0.2s ease;
         }
 
         .select-count:focus {
@@ -94,13 +103,18 @@
         }
 
         .btn {
-            padding: 0.8rem 1.5rem;
-            font-size: 1rem;
-            font-weight: 600;
-            border: none;
+            padding: 0.7rem 1.4rem;
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+            border: 1px solid transparent;
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s ease;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .btn-primary {
@@ -116,7 +130,7 @@
         .btn-secondary {
             background-color: var(--card-bg);
             color: var(--text-color);
-            border: 2px solid var(--border-color);
+            border-color: var(--border-color);
         }
 
         .btn-secondary:hover {
@@ -130,19 +144,19 @@
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
             margin-bottom: 2.5rem;
-            border-bottom: 1px solid var(--border-color);
             padding-bottom: 10px;
         }
 
         .tab {
             padding: 0.5rem 1.2rem;
             background: transparent;
-            border: none;
-            color: #8b92ad;
-            font-size: 1rem;
-            font-weight: 600;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 400;
+            letter-spacing: 0.3px;
             cursor: pointer;
             border-radius: 6px;
             transition: all 0.2s ease;
@@ -150,15 +164,16 @@
 
         .tab:hover {
             color: var(--text-color);
-            background-color: rgba(255, 121, 198, 0.05);
+            background-color: rgba(255, 255, 255, 0.03);
         }
 
         .tab.active {
             color: var(--accent-color);
-            background-color: rgba(255, 121, 198, 0.1);
+            background-color: rgba(255, 255, 255, 0.05);
+            border-color: var(--border-color);
         }
 
-        /* --- Updated Cards and Grid Layout --- */
+        /* --- Cards and Grid Layout --- */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -178,8 +193,8 @@
 
         .card:hover {
             transform: translateY(-6px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6);
-            border-color: rgba(255, 121, 198, 0.5);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8);
+            border-color: rgba(255, 255, 255, 0.25);
         }
 
         .card:active {
@@ -195,17 +210,16 @@
         }
 
         .card:hover .card-img {
-            transform: scale(1.04);
+            transform: scale(1.03);
         }
 
-        /* Hover Overlay styles */
         .card-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to top, rgba(15, 17, 26, 0.95) 0%, rgba(15, 17, 26, 0.3) 60%, rgba(15, 17, 26, 0) 100%);
+            background: linear-gradient(to top, rgba(10, 10, 10, 0.95) 0%, rgba(10, 10, 10, 0.4) 60%, rgba(10, 10, 10, 0) 100%);
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
@@ -223,43 +237,57 @@
         .card-overlay-footer {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
         .card-meta {
             display: flex;
             justify-content: space-between;
-            font-size: 0.9rem;
-            color: #e3e6ed;
+            font-size: 0.85rem;
+            color: var(--text-color);
             text-shadow: 0 1px 3px rgba(0,0,0,0.9);
+            letter-spacing: 0.3px;
+        }
+
+        .card-meta span strong {
+            color: var(--accent-hover);
         }
 
         .card-actions {
             display: flex;
-            justify-content: flex-end;
-            gap: 10px;
+            justify-content: flex-start; /* Aligns "View Raw" to the left */
             pointer-events: auto;
         }
 
         .view-link {
-            font-size: 0.85rem;
-            color: var(--accent-color);
+            font-size: 0.8rem;
+            color: var(--text-color);
             text-decoration: none;
-            font-weight: bold;
-            background: rgba(15, 17, 26, 0.85);
-            padding: 6px 12px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            background: rgba(10, 10, 10, 0.85);
+            padding: 6px 14px;
             border-radius: 6px;
             border: 1px solid var(--border-color);
             transition: all 0.2s ease;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
+            gap: 4px;
+        }
+
+        .view-link span {
+            transition: transform 0.2s ease;
         }
 
         .view-link:hover {
             color: #000;
             border-color: var(--accent-hover);
-            background: var(--accent-color);
+            background: var(--accent-hover);
+        }
+
+        .view-link:hover span {
+            transform: translateX(2px);
         }
 
         /* --- Fullscreen Lightbox Modal --- */
@@ -269,7 +297,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(10, 11, 18, 0.96);
+            background-color: rgba(5, 5, 5, 0.98);
             z-index: 1000;
             display: flex;
             flex-direction: column;
@@ -289,7 +317,7 @@
             position: absolute;
             top: 20px;
             right: 25px;
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
             color: #fff;
             font-size: 1.5rem;
@@ -310,9 +338,44 @@
             transform: rotate(90deg);
         }
 
+        /* Navigation Arrows */
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-color);
+            font-size: 1.5rem;
+            width: 50px;
+            height: 60px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            z-index: 1010;
+            user-select: none;
+        }
+
+        .lightbox-nav:hover {
+            background: var(--accent-color);
+            color: #000;
+            border-color: var(--accent-color);
+        }
+
+        .lightbox-nav-left {
+            left: 25px;
+        }
+
+        .lightbox-nav-right {
+            right: 25px;
+        }
+
         .lightbox-content {
             position: relative;
-            max-width: 90%;
+            max-width: 80%;
             max-height: 80vh;
             display: flex;
             justify-content: center;
@@ -324,7 +387,7 @@
             max-height: 80vh;
             object-fit: contain;
             border-radius: 8px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.9);
             opacity: 0;
             transform: scale(0.95);
             transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -338,7 +401,7 @@
         .lightbox-info {
             margin-top: 20px;
             text-align: center;
-            color: #8b92ad;
+            color: var(--text-muted);
             font-size: 0.95rem;
             z-index: 1005;
         }
@@ -357,17 +420,17 @@
         }
 
         .lightbox-details span strong {
-            color: var(--accent-color);
+            color: var(--accent-hover);
         }
 
-        /* --- Custom Toast Notification --- */
+        /* --- Toast Notification --- */
         .toast {
             position: fixed;
             bottom: 25px;
             right: 25px;
             background-color: var(--card-bg);
             color: var(--text-color);
-            border-left: 4px solid var(--accent-color);
+            border-left: 4px solid var(--accent-hover);
             padding: 12px 20px;
             border-radius: 6px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
@@ -376,7 +439,7 @@
             opacity: 0;
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             font-size: 0.95rem;
-            font-weight: 500;
+            font-weight: 400;
         }
 
         .toast.show {
@@ -390,14 +453,14 @@
             grid-column: 1 / -1;
             padding: 3rem;
             font-size: 1.2rem;
-            color: #8b92ad;
+            color: var(--text-muted);
         }
 
         .spinner {
             display: inline-block;
             width: 30px;
             height: 30px;
-            border: 3px solid rgba(255, 121, 198, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.1);
             border-radius: 50%;
             border-top-color: var(--accent-color);
             animation: spin 1s ease-in-out infinite;
@@ -425,23 +488,21 @@
                 placeholder="Search wallpapers (e.g. anime, nature)..."
                 onkeydown="if(event.key === 'Enter') fetchSearch()"
             >
-            
+            <button class="btn btn-primary" onclick="fetchSearch()">Search</button>
+            <button class="btn btn-secondary" onclick="fetchLucky()">🎲 I'm Feeling Lucky</button>
             <select id="limitSelect" class="select-count" title="Entries count">
                 <option value="10">10</option>
                 <option value="24" selected>24</option>
                 <option value="50">50</option>
                 <option value="100">100</option>
             </select>
-
-            <button class="btn btn-primary" onclick="fetchSearch()">Search</button>
-            <button class="btn btn-secondary" onclick="fetchLucky()">🎲 I'm Feeling Lucky</button>
         </div>
 
         <div class="tabs-container">
-            <button id="tab-all" class="tab active" onclick="switchTab('all')">All</button>
-            <button id="tab-most" class="tab" onclick="switchTab('most')"> Best 🔥</button>
+            <button id="tab-all" class="tab" onclick="switchTab('all')">All</button>
+            <button id="tab-most" class="tab" onclick="switchTab('most')">Best 🔥</button>
             <button id="tab-general" class="tab" onclick="switchTab('general')">General</button>
-            <button id="tab-anime" class="tab" onclick="switchTab('anime')">Anime</button>
+            <button id="tab-anime" class="tab active" onclick="switchTab('anime')">Anime</button>
             <button id="tab-people" class="tab" onclick="switchTab('people')">People</button>
         </div>
 
@@ -450,15 +511,19 @@
         </main>
     </div>
 
+    <!-- Lightbox with arrow controls -->
     <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
         <button class="lightbox-close" onclick="closeLightbox(event)">&times;</button>
+        
+        <button class="lightbox-nav lightbox-nav-left" onclick="navigateLightbox(-1, event)">&#8592;</button>
+        <button class="lightbox-nav lightbox-nav-right" onclick="navigateLightbox(1, event)">&#8594;</button>
+
         <div class="lightbox-content">
             <img id="lightboxImg" class="lightbox-img" src="" alt="Fullscreen wallpaper">
         </div>
         <div class="lightbox-info">
             <h3 id="lightboxTitle">Wallpaper Details</h3>
-            <div id="lightboxDetails" class="lightbox-details">
-                </div>
+            <div id="lightboxDetails" class="lightbox-details"></div>
         </div>
     </div>
 
@@ -474,17 +539,24 @@
         const lightboxDetails = document.getElementById('lightboxDetails');
         const toast = document.getElementById('toast');
         
-        let allWallpapers = []; // Raw list
-        let currentTab = 'all'; // Active tab state
+        let allWallpapers = []; 
+        let currentTab = 'anime'; 
+        let currentLightboxIndex = -1;
 
         window.addEventListener('DOMContentLoaded', () => {
             fetchLucky();
         });
 
-        // Close lightbox with ESC key
+        // Keybindings for escaping lightbox and navigating images
         window.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+            if (!lightbox.classList.contains('active')) return;
+
+            if (e.key === 'Escape') {
                 closeLightbox(e);
+            } else if (e.key === 'ArrowLeft') {
+                navigateLightbox(-1, e);
+            } else if (e.key === 'ArrowRight') {
+                navigateLightbox(1, e);
             }
         });
 
@@ -501,20 +573,18 @@
             grid.innerHTML = `<div class="status-message" style="color: #ff5555;">⚠️ Error: ${msg}</div>`;
         }
 
-        // Direct Download implementation (No CORS proxy)
         function downloadWallpaper(url) {
-            // Show toast notification
             toast.classList.add('show');
             setTimeout(() => {
                 toast.classList.remove('show');
             }, 3500);
 
-            // Open original high-res image directly in a new tab
             const win = window.open(url, '_blank');
             if (win) win.focus();
         }
 
-        function renderWallpapers() {
+        // Get sorted/filtered wallpapers list matching currently active tab
+        function getActiveList() {
             let filtered = [...allWallpapers];
 
             if (currentTab === 'most') {
@@ -525,8 +595,13 @@
                     return itemCategory === currentTab;
                 });
             }
+            return filtered;
+        }
 
-            if (filtered.length === 0) {
+        function renderWallpapers() {
+            const activeWallpapers = getActiveList();
+
+            if (activeWallpapers.length === 0) {
                 if (allWallpapers.length === 0) {
                     grid.innerHTML = '<div class="status-message">No wallpapers found. Try another search query!</div>';
                 } else {
@@ -535,7 +610,7 @@
                 return;
             }
 
-            grid.innerHTML = filtered.map((item, index) => {
+            grid.innerHTML = activeWallpapers.map((item, index) => {
                 const imgUrl = item.thumbs?.large || item.path; 
                 const originalUrl = item.path || item.url;
                 const resolution = item.resolution || `${item.dimension_x}x${item.dimension_y}`;
@@ -543,7 +618,6 @@
                 return `
                     <article class="card" onclick="openLightbox(${index}, event)">
                         <img src="${imgUrl}" alt="Wallpaper ${item.id}" class="card-img" loading="lazy">
-                        
                         <div class="card-overlay">
                             <div class="card-overlay-footer">
                                 <div class="card-meta">
@@ -551,7 +625,9 @@
                                     <span>Views: <strong>${item.views || 0}</strong></span>
                                 </div>
                                 <div class="card-actions">
-                                    <a href="${originalUrl}" target="_blank" class="view-link" onclick="event.stopPropagation();">View Raw →</a>
+                                    <a href="${originalUrl}" target="_blank" class="view-link" onclick="event.stopPropagation();">
+                                        View Raw <span>&rarr;</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -560,21 +636,14 @@
             }).join('');
         }
 
-        /* --- Full-Screen Visualizer Controls --- */
         function openLightbox(index, event) {
-            if (event.target.closest('.card-actions')) return;
+            if (event && event.target.closest('.card-actions')) return;
 
-            const activeList = [...allWallpapers];
-            let filtered = activeList;
-
-            if (currentTab === 'most') {
-                filtered.sort((a, b) => (b.views || 0) - (a.views || 0));
-            } else if (currentTab !== 'all') {
-                filtered = filtered.filter(item => (item.category || '').toLowerCase() === currentTab);
-            }
-
-            const item = filtered[index];
+            const filteredList = getActiveList();
+            const item = filteredList[index];
             if (!item) return;
+
+            currentLightboxIndex = index;
 
             lightboxImg.src = ''; 
             lightboxImg.src = item.path || item.url;
@@ -591,9 +660,27 @@
             lightbox.classList.add('active');
         }
 
+        function navigateLightbox(direction, event) {
+            if (event) event.stopPropagation();
+
+            const filteredList = getActiveList();
+            if (filteredList.length === 0) return;
+
+            // Calculate new index wrapping around borders cleanly
+            let newIndex = currentLightboxIndex + direction;
+            if (newIndex < 0) {
+                newIndex = filteredList.length - 1;
+            } else if (newIndex >= filteredList.length) {
+                newIndex = 0;
+            }
+
+            openLightbox(newIndex);
+        }
+
         function closeLightbox(event) {
             if (event.target === lightbox || event.target.classList.contains('lightbox-close') || event.target.tagName === 'BUTTON') {
                 lightbox.classList.remove('active');
+                currentLightboxIndex = -1;
             }
         }
 
