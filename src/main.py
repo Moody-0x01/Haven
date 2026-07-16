@@ -16,5 +16,9 @@ async def lucky(limit: int = Query(default=10, ge=1, le=100)):
     return haven.bulk_search("", limit)
 
 @app.get("/search")
-async def search(q: str = "", limit: int = Query(default=1, ge=1, le=100)):
+async def search(q: str = "", limit: int = Query(default=10, ge=1, le=100)):
     return haven.bulk_search(q, limit)
+
+# @app.get("/trending")
+# async def trending(q: str, limit: int = Query(default=10, ge=1, le=100)):
+#     return haven.bulk_search_trending(q, limit)

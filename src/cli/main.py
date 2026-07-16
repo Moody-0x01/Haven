@@ -1,7 +1,5 @@
 from sys import argv
 
-resolutions 
-
 def main():
     query = "" # Search for...
     # TODO Get the query.

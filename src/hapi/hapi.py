@@ -80,6 +80,31 @@ class Haven:
             if len(imgs): images.extend(imgs)
         self.__latest_result = images
         return images
+    def search_trending(self, q: str = "", page: int = 1, top_range: str = "1M") -> list[dict]:
+        search_url = f"{self.__base}/search"
+        search_url += f"?sorting=toplist&topRange={top_range}&apikey={self.__api_key}&categories={self.__categories}&atleast=1920x1080&page={page}&purity={self.__purity}"
+        if q:
+            search_url += f"&q={quote(q)}"
+        if self.__resolution:
+            search_url += f"&resolutions={self.__resolution}"
+        request = requests.get(search_url)
+        if request.status_code != 200:
+            print(request)
+            assert 0
+        images = [img for img in loads(request.content)['data'] if img['dimension_x'] >= self.__min_width and img['dimension_y'] >= self.__min_height]
+        self.__latest_result = images
+        return images
+
+    def bulk_search_trending(self, q: str = "", pages: int = 4, top_range: str = "1M") -> list[dict]:
+        images = []
+        if pages <= 0:
+            return [{}]
+        for i in range(pages):
+            imgs = self.search_trending(q, i + 1, top_range)
+            if imgs:
+                images.extend(imgs)
+        self.__latest_result = images
+        return images
 
     def download_latest_result(self, download_path: str = "./haven"):
         Haven.download_images(self.__latest_result, download_path);

@@ -30,7 +30,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1300px;
             margin: 0 auto;
         }
 
@@ -40,7 +40,7 @@
         }
 
         header h1 {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             margin-bottom: 0.5rem;
             color: var(--text-color);
             letter-spacing: 1px;
@@ -53,10 +53,10 @@
         .search-area {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 12px;
             justify-content: center;
             align-items: center;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
         }
 
         .search-input {
@@ -77,7 +77,6 @@
             border-color: var(--accent-color);
         }
 
-        /* --- Dropdown Styling --- */
         .select-count {
             padding: 0.8rem 1.2rem;
             font-size: 1rem;
@@ -126,95 +125,266 @@
             transform: translateY(-1px);
         }
 
+        /* --- Tab bar styles --- */
+        .tabs-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 2.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .tab {
+            padding: 0.5rem 1.2rem;
+            background: transparent;
+            border: none;
+            color: #8b92ad;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .tab:hover {
+            color: var(--text-color);
+            background-color: rgba(255, 121, 198, 0.05);
+        }
+
+        .tab.active {
+            color: var(--accent-color);
+            background-color: rgba(255, 121, 198, 0.1);
+        }
+
+        /* --- Updated Cards and Grid Layout --- */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 24px;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
         }
 
         .card {
+            position: relative;
             background-color: var(--card-bg);
-            border-radius: 12px;
+            border-radius: 14px;
             overflow: hidden;
             border: 1px solid var(--border-color);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: flex;
-            flex-direction: column;
+            transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+            aspect-ratio: 16 / 9;
+            cursor: pointer;
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
-            border-color: rgba(255, 121, 198, 0.3);
+            transform: translateY(-6px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6);
+            border-color: rgba(255, 121, 198, 0.5);
         }
 
-        .card-img-wrapper {
-            position: relative;
-            width: 100%;
-            padding-top: 56.25%;
-            background-color: #000;
-            overflow: hidden;
+        .card:active {
+            transform: translateY(-2px);
         }
 
         .card-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+            display: block;
+        }
+
+        .card:hover .card-img {
+            transform: scale(1.04);
+        }
+
+        /* Hover Overlay styles */
+        .card-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .card:hover .card-img {
-            transform: scale(1.05);
-        }
-
-        .card-info {
-            padding: 1rem;
+            background: linear-gradient(to top, rgba(15, 17, 26, 0.95) 0%, rgba(15, 17, 26, 0.3) 60%, rgba(15, 17, 26, 0) 100%);
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            flex-grow: 1;
+            justify-content: flex-end;
+            padding: 1.4rem;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            box-sizing: border-box;
+            z-index: 2;
+        }
+
+        .card:hover .card-overlay {
+            opacity: 1;
+        }
+
+        .card-overlay-footer {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .card-meta {
             display: flex;
             justify-content: space-between;
-            font-size: 0.85rem;
-            color: #8b92ad;
-        }
-
-        .card-tag {
-            align-self: flex-start;
-            background: rgba(255, 121, 198, 0.1);
-            color: var(--accent-color);
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            text-transform: uppercase;
+            font-size: 0.9rem;
+            color: #e3e6ed;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.9);
         }
 
         .card-actions {
-            margin-top: auto;
             display: flex;
             justify-content: flex-end;
+            gap: 10px;
+            pointer-events: auto;
         }
 
         .view-link {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--accent-color);
             text-decoration: none;
             font-weight: bold;
-            transition: color 0.2s ease;
+            background: rgba(15, 17, 26, 0.85);
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
         }
 
         .view-link:hover {
-            color: var(--accent-hover);
-            text-decoration: underline;
+            color: #000;
+            border-color: var(--accent-hover);
+            background: var(--accent-color);
         }
 
+        /* --- Fullscreen Lightbox Modal --- */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(10, 11, 18, 0.96);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .lightbox.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1.5rem;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s ease;
+            z-index: 1010;
+        }
+
+        .lightbox-close:hover {
+            background: var(--accent-color);
+            color: #000;
+            transform: rotate(90deg);
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 80vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox-img {
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .lightbox.active .lightbox-img {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .lightbox-info {
+            margin-top: 20px;
+            text-align: center;
+            color: #8b92ad;
+            font-size: 0.95rem;
+            z-index: 1005;
+        }
+
+        .lightbox-info h3 {
+            color: var(--text-color);
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .lightbox-details {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 5px;
+        }
+
+        .lightbox-details span strong {
+            color: var(--accent-color);
+        }
+
+        /* --- Custom Toast Notification --- */
+        .toast {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border-left: 4px solid var(--accent-color);
+            padding: 12px 20px;
+            border-radius: 6px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            z-index: 2000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* --- Loading State & Spinner --- */
         .status-message {
             text-align: center;
             grid-column: 1 / -1;
@@ -267,15 +437,56 @@
             <button class="btn btn-secondary" onclick="fetchLucky()">🎲 I'm Feeling Lucky</button>
         </div>
 
+        <div class="tabs-container">
+            <button id="tab-all" class="tab active" onclick="switchTab('all')">All</button>
+            <button id="tab-most" class="tab" onclick="switchTab('most')"> Best 🔥</button>
+            <button id="tab-general" class="tab" onclick="switchTab('general')">General</button>
+            <button id="tab-anime" class="tab" onclick="switchTab('anime')">Anime</button>
+            <button id="tab-people" class="tab" onclick="switchTab('people')">People</button>
+        </div>
+
         <main id="wallpaperGrid" class="grid">
-            <div class="status-message">Enter a keyword or click 'I'm Feeling Lucky' to get started!</div>
+            <div class="status-message">Loading system...</div>
         </main>
     </div>
+
+    <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+        <button class="lightbox-close" onclick="closeLightbox(event)">&times;</button>
+        <div class="lightbox-content">
+            <img id="lightboxImg" class="lightbox-img" src="" alt="Fullscreen wallpaper">
+        </div>
+        <div class="lightbox-info">
+            <h3 id="lightboxTitle">Wallpaper Details</h3>
+            <div id="lightboxDetails" class="lightbox-details">
+                </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Opening raw wallpaper! Press Ctrl + S to save.</div>
 
     <script>
         const grid = document.getElementById('wallpaperGrid');
         const searchInput = document.getElementById('searchInput');
         const limitSelect = document.getElementById('limitSelect');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const lightboxTitle = document.getElementById('lightboxTitle');
+        const lightboxDetails = document.getElementById('lightboxDetails');
+        const toast = document.getElementById('toast');
+        
+        let allWallpapers = []; // Raw list
+        let currentTab = 'all'; // Active tab state
+
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchLucky();
+        });
+
+        // Close lightbox with ESC key
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+                closeLightbox(e);
+            }
+        });
 
         function showLoading() {
             grid.innerHTML = `
@@ -290,36 +501,114 @@
             grid.innerHTML = `<div class="status-message" style="color: #ff5555;">⚠️ Error: ${msg}</div>`;
         }
 
-        function renderWallpapers(wallpapers) {
-            if (!wallpapers || wallpapers.length === 0) {
-                grid.innerHTML = '<div class="status-message">No wallpapers found. Try another search query!</div>';
+        // Direct Download implementation (No CORS proxy)
+        function downloadWallpaper(url) {
+            // Show toast notification
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3500);
+
+            // Open original high-res image directly in a new tab
+            const win = window.open(url, '_blank');
+            if (win) win.focus();
+        }
+
+        function renderWallpapers() {
+            let filtered = [...allWallpapers];
+
+            if (currentTab === 'most') {
+                filtered.sort((a, b) => (b.views || 0) - (a.views || 0));
+            } else if (currentTab !== 'all') {
+                filtered = filtered.filter(item => {
+                    const itemCategory = (item.category || '').toLowerCase();
+                    return itemCategory === currentTab;
+                });
+            }
+
+            if (filtered.length === 0) {
+                if (allWallpapers.length === 0) {
+                    grid.innerHTML = '<div class="status-message">No wallpapers found. Try another search query!</div>';
+                } else {
+                    grid.innerHTML = `<div class="status-message">No wallpapers in the "${currentTab}" category for this result set.</div>`;
+                }
                 return;
             }
 
-            grid.innerHTML = wallpapers.map(item => {
+            grid.innerHTML = filtered.map((item, index) => {
                 const imgUrl = item.thumbs?.large || item.path; 
                 const originalUrl = item.path || item.url;
                 const resolution = item.resolution || `${item.dimension_x}x${item.dimension_y}`;
-                const category = item.category || 'General';
 
                 return `
-                    <article class="card">
-                        <div class="card-img-wrapper">
-                            <img src="${imgUrl}" alt="Wallpaper ${item.id}" class="card-img" loading="lazy">
-                        </div>
-                        <div class="card-info">
-                            <span class="card-tag">${category}</span>
-                            <div class="card-meta">
-                                <span>Resolution: <strong>${resolution}</strong></span>
-                                <span>Views: <strong>${item.views || 0}</strong></span>
-                            </div>
-                            <div class="card-actions">
-                                <a href="${originalUrl}" target="_blank" class="view-link">View Original File →</a>
+                    <article class="card" onclick="openLightbox(${index}, event)">
+                        <img src="${imgUrl}" alt="Wallpaper ${item.id}" class="card-img" loading="lazy">
+                        
+                        <div class="card-overlay">
+                            <div class="card-overlay-footer">
+                                <div class="card-meta">
+                                    <span>Resolution: <strong>${resolution}</strong></span>
+                                    <span>Views: <strong>${item.views || 0}</strong></span>
+                                </div>
+                                <div class="card-actions">
+                                    <a href="${originalUrl}" target="_blank" class="view-link" onclick="event.stopPropagation();">View Raw →</a>
+                                </div>
                             </div>
                         </div>
                     </article>
                 `;
             }).join('');
+        }
+
+        /* --- Full-Screen Visualizer Controls --- */
+        function openLightbox(index, event) {
+            if (event.target.closest('.card-actions')) return;
+
+            const activeList = [...allWallpapers];
+            let filtered = activeList;
+
+            if (currentTab === 'most') {
+                filtered.sort((a, b) => (b.views || 0) - (a.views || 0));
+            } else if (currentTab !== 'all') {
+                filtered = filtered.filter(item => (item.category || '').toLowerCase() === currentTab);
+            }
+
+            const item = filtered[index];
+            if (!item) return;
+
+            lightboxImg.src = ''; 
+            lightboxImg.src = item.path || item.url;
+            lightboxTitle.innerText = `Wallpaper #${item.id}`;
+            
+            const resolution = item.resolution || `${item.dimension_x}x${item.dimension_y}`;
+            lightboxDetails.innerHTML = `
+                <span>Resolution: <strong>${resolution}</strong></span>
+                <span>Views: <strong>${item.views || 0}</strong></span>
+                <span>Category: <strong>${item.category || 'N/A'}</strong></span>
+                <span>Favorites: <strong>${item.favorites || 0}</strong></span>
+            `;
+
+            lightbox.classList.add('active');
+        }
+
+        function closeLightbox(event) {
+            if (event.target === lightbox || event.target.classList.contains('lightbox-close') || event.target.tagName === 'BUTTON') {
+                lightbox.classList.remove('active');
+            }
+        }
+
+        function switchTab(tabName) {
+            currentTab = tabName;
+            
+            document.querySelectorAll('.tab').forEach(tab => {
+                if (tab.id === `tab-${tabName}`) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+
+            renderWallpapers();
         }
 
         async function fetchSearch() {
@@ -332,8 +621,8 @@
                 const response = await fetch(url);
                 if (!response.ok) throw new Error('Failed to fetch from search API.');
                 
-                const data = await response.json();
-                renderWallpapers(data);
+                allWallpapers = await response.json();
+                renderWallpapers();
             } catch (err) {
                 showError(err.message);
             }
@@ -347,8 +636,8 @@
                 const response = await fetch(`/imIlucky?limit=${limit}`);
                 if (!response.ok) throw new Error('Failed to fetch from Lucky API.');
 
-                const data = await response.json();
-                renderWallpapers(data);
+                allWallpapers = await response.json();
+                renderWallpapers();
             } catch (err) {
                 showError(err.message);
             }
