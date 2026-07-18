@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wallhaven Explorer</title>
+    <title> Dusk </title>
+    <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #0a0a0a;             /* Pure matte midnight charcoal */
@@ -34,22 +35,32 @@
             max-width: 1300px;
             margin: 0 auto;
         }
-
+        
         header {
             text-align: center;
             margin-bottom: 2.5rem;
         }
-
+        
         header h1 {
-            font-size: 2.8rem;
+            font-size: 3.2rem;
             margin-bottom: 0.5rem;
             color: var(--text-color);
             letter-spacing: 1px;
         }
 
-        header h1 span {
+        header h1 .accent {
             color: var(--accent-color);
             border-bottom: 2px solid var(--accent-hover);
+            display: inline-block;
+            padding-bottom: 4px;
+            line-height: 1;
+        }
+
+        /* Decorative 'Dusk' word styling */
+        .dusk-word {
+            font-family: 'UnifrakturCook', serif;
+            color: var(--accent-hover);
+            text-shadow: 0 2px 6px rgba(0,0,0,0.7);
         }
 
         /* --- Refined Search Bar Chemistry --- */
@@ -59,10 +70,11 @@
             gap: 10px;
             justify-content: center;
             align-items: stretch;
-            margin-bottom: 2.5rem;
-            max-width: 900px;
+            margin-bottom: 2rem;
+            max-width: 1000px;
             margin-left: auto;
             margin-right: auto;
+            padding: 0 8px;
         }
 
         .search-input {
@@ -78,6 +90,19 @@
             color: var(--text-color);
             outline: none;
             transition: all 0.2s ease;
+        }
+
+        /* visually hidden helper for accessibility */
+        .sr-only {
+            position: absolute !important;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
 
         .search-input:focus {
@@ -131,12 +156,15 @@
             background-color: var(--card-bg);
             color: var(--text-color);
             border-color: var(--border-color);
+            outline: none;
         }
 
+        /* Subtle hover/active for secondary buttons (e.g. "I'm Feeling Lucky") */
         .btn-secondary:hover {
-            border-color: var(--accent-color);
-            color: var(--accent-color);
-            transform: translateY(-1px);
+            border-color: rgba(255,255,255,0.04);
+            color: var(--text-color);
+            background-color: rgba(255,255,255,0.02);
+            transform: none;
         }
 
         /* --- Tab bar styles --- */
@@ -173,22 +201,43 @@
             border-color: var(--border-color);
         }
 
+        /* Premium Minimalist Trending Tab Accent */
+        .tab-trending {
+            border: 1px solid rgba(229, 192, 123, 0.25);
+            color: var(--accent-hover);
+            background-color: var(--card-bg);
+        }
+
+        .tab-trending:hover {
+            background-color: rgba(229, 192, 123, 0.05);
+            border-color: var(--accent-hover);
+            color: var(--accent-hover);
+        }
+
+        .tab-trending.active {
+            color: var(--text-color) !important;
+            border-color: var(--accent-hover) !important;
+            background-color: rgba(229, 192, 123, 0.12) !important;
+            box-shadow: 0 0 15px rgba(229, 192, 123, 0.1);
+        }
+
         /* --- Cards and Grid Layout --- */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
         }
 
         .card {
             position: relative;
             background-color: var(--card-bg);
-            border-radius: 14px;
+            border-radius: 12px;
             overflow: hidden;
             border: 1px solid var(--border-color);
-            transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
             aspect-ratio: 16 / 9;
             cursor: pointer;
+            display: block;
         }
 
         .card:hover {
@@ -219,19 +268,24 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to top, rgba(10, 10, 10, 0.95) 0%, rgba(10, 10, 10, 0.4) 60%, rgba(10, 10, 10, 0) 100%);
+            background: linear-gradient(to top, rgba(10, 10, 10, 0.9) 0%, rgba(10, 10, 10, 0.45) 55%, rgba(10, 10, 10, 0) 100%);
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
-            padding: 1.4rem;
+            padding: 1rem;
             opacity: 0;
-            transition: opacity 0.25s ease;
+            transition: opacity 0.22s ease, transform 0.22s ease;
             box-sizing: border-box;
             z-index: 2;
+            pointer-events: none;
+            transform: translateY(6px);
         }
 
-        .card:hover .card-overlay {
+        .card:hover .card-overlay,
+        .card:focus-within .card-overlay {
             opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
         }
 
         .card-overlay-footer {
@@ -255,7 +309,7 @@
 
         .card-actions {
             display: flex;
-            justify-content: flex-start; /* Aligns "View Raw" to the left */
+            justify-content: flex-start;
             pointer-events: auto;
         }
 
@@ -274,6 +328,7 @@
             display: inline-flex;
             align-items: center;
             gap: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.6);
         }
 
         .view-link span {
@@ -375,8 +430,8 @@
 
         .lightbox-content {
             position: relative;
-            max-width: 80%;
-            max-height: 80vh;
+            max-width: 90%;
+            max-height: 85vh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -442,6 +497,22 @@
             font-weight: 400;
         }
 
+        /* Focus and keyboard navigation helpers - only triggers on keyboard tab */
+        .btn:focus-visible, 
+        .view-link:focus-visible, 
+        .lightbox-close:focus-visible, 
+        .lightbox-nav:focus-visible {
+            outline: 3px solid rgba(229,192,123,0.18);
+            outline-offset: 2px;
+        }
+
+        /* Removes default focus outline for mouse clicks */
+        .btn:focus, 
+        .view-link:focus, 
+        .lightbox-close:focus, 
+        .lightbox-nav:focus {
+            outline: none;
+        }
         .toast.show {
             transform: translateY(0);
             opacity: 1;
@@ -476,37 +547,39 @@
 
     <div class="container">
         <header>
-            <h1>Haven<span>Wallpapers</span></h1>
+            <h1><span class="dusk-word">Dusk</span><span> Wallpapers</span></h1>
             <p>Fetch and explore beautifully cataloged desktop backgrounds</p>
         </header>
 
-        <div class="search-area">
+        <form class="search-area" onsubmit="event.preventDefault(); fetchSearch();">
+            <label for="searchInput" class="sr-only">Search wallpapers</label>
             <input 
                 type="text" 
                 id="searchInput" 
                 class="search-input" 
                 placeholder="Search wallpapers (e.g. anime, nature)..."
-                onkeydown="if(event.key === 'Enter') fetchSearch()"
             >
-            <button class="btn btn-primary" onclick="fetchSearch()">Search</button>
-            <button class="btn btn-secondary" onclick="fetchLucky()">🎲 I'm Feeling Lucky</button>
+            <button class="btn btn-primary" type="submit" aria-label="Search">Search</button>
+            <button class="btn btn-secondary" type="button" onclick="fetchLucky()" aria-label="I'm Feeling Lucky">🎲 I'm Feeling Lucky</button>
+            <label for="limitSelect" class="sr-only">Results per page</label>
             <select id="limitSelect" class="select-count" title="Entries count">
                 <option value="10">10</option>
                 <option value="24" selected>24</option>
                 <option value="50">50</option>
                 <option value="100">100</option>
             </select>
-        </div>
+        </form>
 
         <div class="tabs-container">
+            <button id="tab-trending" class="tab tab-trending active" onclick="switchTab('trending')">Trending ⚡</button>
             <button id="tab-all" class="tab" onclick="switchTab('all')">All</button>
             <button id="tab-most" class="tab" onclick="switchTab('most')">Best 🔥</button>
             <button id="tab-general" class="tab" onclick="switchTab('general')">General</button>
-            <button id="tab-anime" class="tab active" onclick="switchTab('anime')">Anime</button>
+            <button id="tab-anime" class="tab" onclick="switchTab('anime')">Anime</button>
             <button id="tab-people" class="tab" onclick="switchTab('people')">People</button>
         </div>
 
-        <main id="wallpaperGrid" class="grid">
+        <main id="wallpaperGrid" class="grid" role="list">
             <div class="status-message">Loading system...</div>
         </main>
     </div>
@@ -539,15 +612,16 @@
         const lightboxDetails = document.getElementById('lightboxDetails');
         const toast = document.getElementById('toast');
         
-        let allWallpapers = []; 
-        let currentTab = 'anime'; 
+        let trendingWallpapers = [];
+        let currentWallpapers = [];
+        let lastSearchQuery = '';
+        let currentTab = 'trending'; 
         let currentLightboxIndex = -1;
 
         window.addEventListener('DOMContentLoaded', () => {
-            fetchLucky();
+            fetchTrending();
         });
 
-        // Keybindings for escaping lightbox and navigating images
         window.addEventListener('keydown', (e) => {
             if (!lightbox.classList.contains('active')) return;
 
@@ -583,9 +657,12 @@
             if (win) win.focus();
         }
 
-        // Get sorted/filtered wallpapers list matching currently active tab
         function getActiveList() {
-            let filtered = [...allWallpapers];
+            if (currentTab === 'trending') {
+                return [...trendingWallpapers];
+            }
+
+            let filtered = [...currentWallpapers];
 
             if (currentTab === 'most') {
                 filtered.sort((a, b) => (b.views || 0) - (a.views || 0));
@@ -595,6 +672,7 @@
                     return itemCategory === currentTab;
                 });
             }
+
             return filtered;
         }
 
@@ -602,10 +680,18 @@
             const activeWallpapers = getActiveList();
 
             if (activeWallpapers.length === 0) {
-                if (allWallpapers.length === 0) {
-                    grid.innerHTML = '<div class="status-message">No wallpapers found. Try another search query!</div>';
+                if (currentTab === 'trending') {
+                    if (trendingWallpapers.length === 0) {
+                        grid.innerHTML = '<div class="status-message">No trending wallpapers available.</div>';
+                    } else {
+                        grid.innerHTML = `<div class="status-message">No wallpapers in the "${currentTab}" trending set.</div>`;
+                    }
                 } else {
-                    grid.innerHTML = `<div class="status-message">No wallpapers in the "${currentTab}" category for this result set.</div>`;
+                    if (currentWallpapers.length === 0) {
+                        grid.innerHTML = '<div class="status-message">No wallpapers found. Try another search query!</div>';
+                    } else {
+                        grid.innerHTML = `<div class="status-message">No wallpapers in the "${currentTab}" category for this result set.</div>`;
+                    }
                 }
                 return;
             }
@@ -666,7 +752,6 @@
             const filteredList = getActiveList();
             if (filteredList.length === 0) return;
 
-            // Calculate new index wrapping around borders cleanly
             let newIndex = currentLightboxIndex + direction;
             if (newIndex < 0) {
                 newIndex = filteredList.length - 1;
@@ -695,20 +780,66 @@
                 }
             });
 
-            renderWallpapers();
+            if (tabName === 'trending') {
+                // show the cached trending set (fetch to refresh)
+                fetchTrending();
+            } else {
+                // always fetch search results for the selected tab using current search state
+                fetchSearchForTab(tabName);
+            }
         }
 
-        async function fetchSearch() {
-            const query = searchInput.value.trim();
+        async function fetchTrending() {
             const limit = limitSelect.value;
             showLoading();
 
             try {
-                const url = `/search?q=${encodeURIComponent(query)}&limit=${limit}`;
+                // Ignore the input field query entirely to look up global trending updates
+                const url = `/trending?q=&limit=${limit}`;
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Failed to fetch from trending API endpoint.');
+
+                trendingWallpapers = await response.json();
+                // render only if trending is the active tab
+                if (currentTab === 'trending') renderWallpapers();
+            } catch (err) {
+                showError(err.message);
+            }
+        }
+
+        async function fetchSearch() {
+            // standard search from the form submission: update lastSearchQuery and fetch 'all'
+            const query = searchInput.value.trim();
+            lastSearchQuery = query;
+            await fetchSearchForTab('all');
+        }
+
+        async function fetchSearchForTab(tabName) {
+            const query = (searchInput.value.trim() || lastSearchQuery || '');
+            const limit = limitSelect.value;
+
+            // set the active tab
+            currentTab = tabName;
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.toggle('active', tab.id === `tab-${tabName}`);
+            });
+
+            showLoading();
+            try {
+                let url = `/search?q=${encodeURIComponent(query)}&limit=${limit}`;
+                // For category tabs, request category from the server when applicable
+                if (tabName && tabName !== 'all' && tabName !== 'most') {
+                    url += `&category=${encodeURIComponent(tabName)}`;
+                }
+                // For 'most' use a sort parameter if the API supports it
+                if (tabName === 'most') {
+                    url += `&sort=views`;
+                }
+
                 const response = await fetch(url);
                 if (!response.ok) throw new Error('Failed to fetch from search API.');
-                
-                allWallpapers = await response.json();
+
+                currentWallpapers = await response.json();
                 renderWallpapers();
             } catch (err) {
                 showError(err.message);
@@ -717,13 +848,19 @@
 
         async function fetchLucky() {
             const limit = limitSelect.value;
-            showLoading();
 
+            // Reset tabs to default if getting lucky
+            currentTab = 'all';
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.toggle('active', tab.id === 'tab-all');
+            });
+
+            showLoading();
             try {
                 const response = await fetch(`/imIlucky?limit=${limit}`);
                 if (!response.ok) throw new Error('Failed to fetch from Lucky API.');
 
-                allWallpapers = await response.json();
+                currentWallpapers = await response.json();
                 renderWallpapers();
             } catch (err) {
                 showError(err.message);
