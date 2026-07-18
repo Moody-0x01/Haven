@@ -1,3 +1,5 @@
+src/wallhaven_cache.sqlite
+./src/wallhaven_cache.sqlite
 venv/
 ./src/venv/
 src/venv/
