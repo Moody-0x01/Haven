@@ -2,6 +2,8 @@
 
 WallHaven Explorer is a small Python project for searching, filtering, and downloading wallpapers from the Wallhaven API. It includes a FastAPI app for browsing results in a web UI and a `Haven` client class for programmatic use.
 
+![Preview](./img/img.png)
+
 ## What This Project Does
 
 - Search Wallhaven by keyword or random seed.
@@ -52,8 +54,7 @@ The repository currently has two practical entry points:
 If you want to run the web app, start it from the `src` directory so the local package imports resolve cleanly.
 
 ```bash
-cd src
-fastapi run main.py
+cd src && fastapi run ./main.py
 ```
 
 The example script demonstrates how to search and download wallpapers:

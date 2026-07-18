@@ -615,6 +615,8 @@
         let trendingWallpapers = [];
         let currentWallpapers = [];
         let lastSearchQuery = '';
+        let lastFetchedQuery = null;
+        let lastFetchedLimit = null;
         let currentTab = 'trending'; 
         let currentLightboxIndex = -1;
 
@@ -769,24 +771,36 @@
             }
         }
 
-        function switchTab(tabName) {
-            currentTab = tabName;
-            
+        async function switchTab(tabName) {
+            // Decide whether we need to fetch or just filter cached results.
+            const query = (searchInput.value.trim() || lastSearchQuery || '');
+            const limit = limitSelect.value;
+
+            // update UI active state immediately
             document.querySelectorAll('.tab').forEach(tab => {
-                if (tab.id === `tab-${tabName}`) {
-                    tab.classList.add('active');
-                } else {
-                    tab.classList.remove('active');
-                }
+                tab.classList.toggle('active', tab.id === `tab-${tabName}`);
             });
 
             if (tabName === 'trending') {
-                // show the cached trending set (fetch to refresh)
-                fetchTrending();
-            } else {
-                // always fetch search results for the selected tab using current search state
-                fetchSearchForTab(tabName);
+                currentTab = 'trending';
+                // fetch trending if we have no cached trending or limit changed
+                if (!trendingWallpapers.length || lastFetchedLimit !== limit) {
+                    await fetchTrending();
+                } else {
+                    renderWallpapers();
+                }
+                return;
             }
+
+            // For non-trending tabs: only fetch if we have no cached results for current query+limit
+            if (!currentWallpapers.length || lastFetchedQuery !== query || lastFetchedLimit !== limit) {
+                await fetchSearchForTab(tabName);
+                return;
+            }
+
+            // otherwise simply switch tab and filter client-side
+            currentTab = tabName;
+            renderWallpapers();
         }
 
         async function fetchTrending() {
@@ -800,6 +814,7 @@
                 if (!response.ok) throw new Error('Failed to fetch from trending API endpoint.');
 
                 trendingWallpapers = await response.json();
+                lastFetchedLimit = limit;
                 // render only if trending is the active tab
                 if (currentTab === 'trending') renderWallpapers();
             } catch (err) {
@@ -840,6 +855,8 @@
                 if (!response.ok) throw new Error('Failed to fetch from search API.');
 
                 currentWallpapers = await response.json();
+                lastFetchedQuery = query;
+                lastFetchedLimit = limit;
                 renderWallpapers();
             } catch (err) {
                 showError(err.message);
@@ -861,6 +878,10 @@
                 if (!response.ok) throw new Error('Failed to fetch from Lucky API.');
 
                 currentWallpapers = await response.json();
+                // treat lucky as a fresh, empty-query result cache
+                lastFetchedQuery = '';
+                lastFetchedLimit = limit;
+                lastSearchQuery = '';
                 renderWallpapers();
             } catch (err) {
                 showError(err.message);

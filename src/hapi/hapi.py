@@ -100,8 +100,7 @@ class Haven:
         if pages <= 0:
             return [{}]
         for i in range(pages):
-            imgs = self.search_trending(q, i + 1, top_range)
-            if imgs:
+            if imgs := self.search_trending(q, i + 1, top_range):
                 images.extend(imgs)
         self.__latest_result = images
         return images
